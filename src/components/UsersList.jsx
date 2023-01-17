@@ -8,24 +8,27 @@ const UsersList = ({usersList, getUser, selectUser}) => {
 
     usersList.sort((a,b)=>a.last_name.localeCompare(b.last_name));
     
-    const showAlert=()=>{
+    const showAlert=(user)=>{
         Swal.fire({
             title:"Eliminación de usuario",
             text:"¿ Estás seguro ?",
             icon:"warning",
             showDenyButton: true,
             timer: "5000"
+        }) .then((result)=>{
+            if(result.isConfirmed){
+                deleteUser(user)
+            }
         })
-        
-    }
+    };
 
     const deleteUser = (user) => {
+        // showAlert();
         axios.delete(`https://users-crud.academlo.tech/users/${user.id}/`)
         .then(()=>{
             getUser()
             setTimeout(1000)
         })
-        showAlert();
     };
 
 
@@ -46,7 +49,7 @@ const UsersList = ({usersList, getUser, selectUser}) => {
                                 </ul>                     
                                 <div className='buttoncontainer'>
                                     <button className='button sel' onClick={() => selectUser(user)}> <b>Select</b> </button>
-                                    <button className='button del' onClick={() => deleteUser(user)} > <b>Delete</b> </button>
+                                    <button className='button del' onClick={() => showAlert(user)} > <b>Delete</b> </button>
                                 </div>
                             </li>
                         </div>
