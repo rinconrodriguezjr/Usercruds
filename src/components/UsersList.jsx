@@ -1,14 +1,31 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import swal from 'sweetalert'
+import Swal from "sweetalert2"
 
 const UsersList = ({usersList, getUser, selectUser}) => {
 
     usersList.sort((a,b)=>a.last_name.localeCompare(b.last_name));
     
+    const showAlert=()=>{
+        Swal.fire({
+            title:"Eliminación de usuario",
+            text:"¿ Estás seguro ?",
+            icon:"warning",
+            showDenyButton: true,
+            timer: "5000"
+        })
+        
+    }
+
     const deleteUser = (user) => {
         axios.delete(`https://users-crud.academlo.tech/users/${user.id}/`)
-            .then(()=>getUser());
+        .then(()=>{
+            getUser()
+            setTimeout(1000)
+        })
+        showAlert();
     };
 
 
@@ -25,11 +42,11 @@ const UsersList = ({usersList, getUser, selectUser}) => {
                                 <ul>
                                     <li><b><span>Email:</span></b>{" "} {user.email} {" "}</li>
                                     <li><b><span>Birthday:</span></b>{" "} {user.birthday} {" "}</li>
-                                    <li><b><span>Password:</span></b>{" "} {user.password} {" "}</li>
+                                    {/* <li><b><span>Password:</span></b>{" "} {user.password} {" "}</li> */}
                                 </ul>                     
                                 <div className='buttoncontainer'>
                                     <button className='button sel' onClick={() => selectUser(user)}> <b>Select</b> </button>
-                                    <button className='button del' onClick={() => deleteUser(user)}> <b>Delete</b> </button>
+                                    <button className='button del' onClick={() => deleteUser(user)} > <b>Delete</b> </button>
                                 </div>
                             </li>
                         </div>

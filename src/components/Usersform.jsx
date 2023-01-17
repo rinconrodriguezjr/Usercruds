@@ -1,29 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import swal from 'sweetalert'
+import Swal from "sweetalert2"
 
 const Usersform = ({getUser, selectUser, userSelected}) => {
-
-    //1. Crear el useForm handleSubmit, el handleSubmit sirve para los formulario, reduce codigo
-    const { handleSubmit, register, reset } = useForm ();
-
-    //2. Crear una funcion que se asignara al onSubmit del handleSubmit del Formulario, continuando con el POST de la API que lleva 2 parametros "URL y Data"
-    const submit = (data) => {
-        console.log(data);
-        if(userSelected){
-            axios.put(`https://users-crud.academlo.tech/users/${userSelected.id}/`, data)
-                .then(()=>{
-                    getUser()
-                    selectUser()
-                });
-        } else {
-        axios.post(`https://users-crud.academlo.tech/users/`, data)
-            .then(()=>{
-                getUser()
-                reset(emptyForm)
-            });
-    }};
-
+    
     //3. Crear un variable para vaciar la informacion del formulario y evitar errores en la actualizacion
     const emptyForm = {
         first_name: "",
@@ -33,6 +15,9 @@ const Usersform = ({getUser, selectUser, userSelected}) => {
         password: "",
     };
 
+    //1. Crear el useForm handleSubmit, el handleSubmit sirve para los formulario, reduce codigo
+    const { handleSubmit, register, reset } = useForm ();
+
     //4. Crear el useEffect para crear las dependencias
     useEffect(()=>{
         if(userSelected !== null){
@@ -41,6 +26,26 @@ const Usersform = ({getUser, selectUser, userSelected}) => {
             reset(emptyForm)
         }
     },[userSelected]);
+
+    //2. Crear una funcion que se asignara al onSubmit del handleSubmit del Formulario, continuando con el POST de la API que lleva 2 parametros "URL y Data"
+    const submit = (data) => {
+        console.log(data);
+        if(userSelected){
+            axios.put(`https://users-crud.academlo.tech/users/${userSelected.id}/`, data)
+                .then(()=>{
+                    getUser()
+                    selectUser(null)
+                    reset(emptyForm)
+                });
+        } else {
+        axios.post(`https://users-crud.academlo.tech/users/`, data)
+            .then(()=>{
+                getUser()
+                reset(emptyForm)
+            });
+    }};
+
+
 
     //
 
