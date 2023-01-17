@@ -18,6 +18,18 @@ const UsersList = ({usersList, getUser, selectUser}) => {
         }) .then((result)=>{
             if(result.isConfirmed){
                 deleteUser(user)
+                Swal.fire({
+                    title:"Confirmación de eliminación",
+                    text: "El usuario fue eliminado satisfactoriamente",
+                    icon:"success",
+                    timer:"2000"
+                })
+            } else {
+                Swal.fire({
+                    title:"Usuario no eliminado",
+                    icon:"success",
+                    timer: "2000"
+                })
             }
         })
     };
